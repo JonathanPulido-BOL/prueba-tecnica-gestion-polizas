@@ -1,0 +1,243 @@
+{
+  "info": {
+    "name": "Prueba Técnica - Gestión de Pólizas",
+    "description": "Colección para probar la API de gestión de pólizas (Módulo 2). Incluye seguridad por api-key, consultas, renovación, cancelación, gestión de riesgos y mock del CORE. La variable {{baseUrl}} apunta a http://localhost:8080/api/v1 y {{apiKey}} = 123456.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:8080/api/v1",
+      "type": "string"
+    },
+    {
+      "key": "apiKey",
+      "value": "123456",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "Pólizas",
+      "item": [
+        {
+          "name": "GET /polizas (todas)",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "api-key", "value": "{{apiKey}}" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/polizas",
+              "host": ["{{baseUrl}}"],
+              "path": ["polizas"]
+            }
+          }
+        },
+        {
+          "name": "GET /polizas?tipo=COLECTIVA&estado=ACTIVA",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "api-key", "value": "{{apiKey}}" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/polizas?tipo=COLECTIVA&estado=ACTIVA",
+              "host": ["{{baseUrl}}"],
+              "path": ["polizas"],
+              "query": [
+                { "key": "tipo", "value": "COLECTIVA" },
+                { "key": "estado", "value": "ACTIVA" }
+              ]
+            }
+          }
+        },
+        {
+          "name": "GET /polizas?tipo=INDIVIDUAL",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "api-key", "value": "{{apiKey}}" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/polizas?tipo=INDIVIDUAL",
+              "host": ["{{baseUrl}}"],
+              "path": ["polizas"],
+              "query": [
+                { "key": "tipo", "value": "INDIVIDUAL" }
+              ]
+            }
+          }
+        },
+        {
+          "name": "GET /polizas/1/riesgos",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "api-key", "value": "{{apiKey}}" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/polizas/1/riesgos",
+              "host": ["{{baseUrl}}"],
+              "path": ["polizas", "1", "riesgos"]
+            }
+          }
+        },
+        {
+          "name": "POST /polizas/1/renovar (OK: +IPC, estado RENOVADA)",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "api-key", "value": "{{apiKey}}" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/polizas/1/renovar",
+              "host": ["{{baseUrl}}"],
+              "path": ["polizas", "1", "renovar"]
+            }
+          }
+        },
+        {
+          "name": "POST /polizas/3/renovar (FALLA 409: póliza cancelada)",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "api-key", "value": "{{apiKey}}" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/polizas/3/renovar",
+              "host": ["{{baseUrl}}"],
+              "path": ["polizas", "3", "renovar"]
+            }
+          }
+        },
+        {
+          "name": "POST /polizas/1/riesgos (OK: colectiva, 201)",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "api-key", "value": "{{apiKey}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"datosInmueble\": \"Apto 303, Edificio Central, Bogota\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/polizas/1/riesgos",
+              "host": ["{{baseUrl}}"],
+              "path": ["polizas", "1", "riesgos"]
+            }
+          }
+        },
+        {
+          "name": "POST /polizas/2/riesgos (FALLA 409: individual)",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "api-key", "value": "{{apiKey}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"datosInmueble\": \"Apto nuevo\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/polizas/2/riesgos",
+              "host": ["{{baseUrl}}"],
+              "path": ["polizas", "2", "riesgos"]
+            }
+          }
+        },
+        {
+          "name": "POST /polizas/1/cancelar (OK: cancela en cascada)",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "api-key", "value": "{{apiKey}}" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/polizas/1/cancelar",
+              "host": ["{{baseUrl}}"],
+              "path": ["polizas", "1", "cancelar"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Riesgos",
+      "item": [
+        {
+          "name": "POST /riesgos/2/cancelar (OK)",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "api-key", "value": "{{apiKey}}" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/riesgos/2/cancelar",
+              "host": ["{{baseUrl}}"],
+              "path": ["riesgos", "2", "cancelar"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "CORE Mock",
+      "item": [
+        {
+          "name": "POST /core-mock/evento (registra en logs)",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "api-key", "value": "{{apiKey}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"evento\": \"ACTUALIZACION\",\n  \"polizaId\": 555\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/core-mock/evento",
+              "host": ["{{baseUrl}}"],
+              "path": ["core-mock", "evento"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Seguridad",
+      "item": [
+        {
+          "name": "GET /polizas SIN api-key (FALLA 401)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/polizas",
+              "host": ["{{baseUrl}}"],
+              "path": ["polizas"]
+            }
+          }
+        },
+        {
+          "name": "GET /polizas con api-key INCORRECTA (FALLA 401)",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "api-key", "value": "clave-incorrecta" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/polizas",
+              "host": ["{{baseUrl}}"],
+              "path": ["polizas"]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}
